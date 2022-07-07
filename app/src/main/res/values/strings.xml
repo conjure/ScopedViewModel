@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">VmScopeDemo</string>
+    <string name="other_screen">Other Screen</string>
+    <string name="open_child">Open Child</string>
+    <string name="mainfragment">MainFragment</string>
+    <string name="other_fragment">Other Fragment</string>
+    <string name="open_first_screen">Open first screen</string>
+    <string name="child_fragment">Child Fragment</string>
+    <string name="plus_10">+ 10</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="click_me">Click Me</string>
+</resources>
