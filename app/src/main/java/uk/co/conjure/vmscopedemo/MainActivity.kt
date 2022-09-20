@@ -3,8 +3,10 @@ package uk.co.conjure.vmscopedemo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import uk.co.conjure.viewmodelscope.createViewModelScope
 import uk.co.conjure.vmscopedemo.ui.main.NavigationViewModel
 import uk.co.conjure.vmscopedemo.ui.main.Screen
+import uk.co.conjure.vmscopedemo.ui.main.screens.first.ActivityViewModel
 import uk.co.conjure.vmscopedemo.ui.main.screens.first.ParentFragment
 import uk.co.conjure.vmscopedemo.ui.main.screens.second.OtherFragment
 
@@ -18,9 +20,13 @@ private const val SECOND_FRAGMENT_TAG = "SECOND_FRAGMENT"
 class MainActivity : AppCompatActivity() {
 
     private val navigationViewModel: NavigationViewModel by viewModels()
+    private val activityViewModel: ActivityViewModel by createViewModelScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        activityViewModel.setMessage("This is coming from the Activity")
+
         setContentView(R.layout.activity_main)
 
         navigationViewModel.currentScreen.observe(this) { screen ->
