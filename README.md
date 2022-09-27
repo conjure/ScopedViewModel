@@ -1,10 +1,9 @@
 # ScopedViewModel
-
-[![](https://jitpack.io/v/conjure/ScopedViewModel.svg)](https://jitpack.io/#conjure/ScopedViewModel)
+[![](https://jitpack.io/v/uk.co.conjure/ScopedViewModel.svg)](https://jitpack.io/#uk.co.conjure/ScopedViewModel)
 
 ```gradle
 dependencies {
-  implementation 'com.github.conjure:ScopedViewModel:TAG'
+  implementation 'uk.co.conjure:ScopedViewModel:TAG'
 }
 ```
 
