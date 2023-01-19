@@ -69,6 +69,10 @@ class ParentFragment : Fragment() {
         binding.btnOpenOtherScreen.setOnClickListener {
             navigationViewModel.showSecondScreen()
         }
+
+        binding.btnOpenMultifragmentScreen.setOnClickListener {
+            navigationViewModel.showMultifragmentScreen()
+        }
     }
 
     private fun attachChildFragment() {
