@@ -7,12 +7,15 @@ import androidx.lifecycle.ViewModel
 interface AppNavigation {
     fun showFirstScreen()
     fun showSecondScreen()
+    fun showMultifragmentScreen()
+
     val currentScreen: LiveData<Screen>
 }
 
 enum class Screen {
     FIRST,
-    SECOND
+    SECOND,
+    MULTIFRAGMENT
 }
 
 class NavigationViewModel : ViewModel(), AppNavigation {
@@ -25,5 +28,9 @@ class NavigationViewModel : ViewModel(), AppNavigation {
 
     override fun showSecondScreen() {
         currentScreen.value = Screen.SECOND
+    }
+
+    override fun showMultifragmentScreen() {
+        currentScreen.value = Screen.MULTIFRAGMENT
     }
 }
