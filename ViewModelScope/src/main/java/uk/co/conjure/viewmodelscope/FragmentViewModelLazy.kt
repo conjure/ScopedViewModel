@@ -35,22 +35,27 @@ inline fun <reified VM : ViewModel> Fragment.createViewModelScope(
     noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ): Lazy<VM> {
     val key = extraKey ?: DEFAULT_KEY
-    val fragmentFinder = { childFragmentManager.findFragmentByTag(key) }
-    val fragmentProducer = { fragmentFinder() ?: Fragment() }
 
-    val viewModelLazy = viewModels<VM>(
+    val fragmentProducer = {
+        val fragment = if (extraKey == null) {
+            this
+        } else {
+            childFragmentManager.findFragmentByTag(key) ?: (Fragment()
+                .also { keyHolderFragment ->
+                    childFragmentManager.beginTransaction()
+                        .add(keyHolderFragment, key)
+                        .commitNow()
+                })
+        }
+        putOwnerInRegistry<VM>(key, fragment)
+        fragment
+    }
+
+    return viewModels<VM>(
         ownerProducer = fragmentProducer,
         extrasProducer = extrasProducer,
         factoryProducer = factoryProducer
-    )
-
-    registerFragmentOnCreate<VM>(
-        fragmentFinder = fragmentFinder,
-        fragmentProducer = fragmentProducer,
-        key = key
-    )
-
-    return viewModelLazy
+    ).also { vmLazy -> vmLazy.registerWith(this) }
 }
 
 /**
@@ -78,4 +83,14 @@ inline fun <reified VM> Fragment.scopedInterface(): Lazy<VM> = lazy {
             ?: throw IllegalStateException("No ViewModelStoreOwner registered for $vmClazz (implementing ${VM::class}")
         createViewModelLazy(vmClazz, { result.viewModelStore }).value as VM
     }
+}
+
+
+fun <T> Lazy<T>.registerWith(lifecycleOwner: LifecycleOwner) {
+    lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onCreate(owner: LifecycleOwner) {
+            this@registerWith.value
+            owner.lifecycle.removeObserver(this)
+        }
+    })
 }

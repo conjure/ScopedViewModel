@@ -1,8 +1,6 @@
 package uk.co.conjure.viewmodelscope
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 
@@ -30,26 +28,6 @@ inline fun <reified VM : ViewModel> putOwnerInRegistry(extraKey: String, owner: 
     VM::class.java.interfaces.forEach {
         ViewModelStoreOwnerRegistry.instance.registerInterface(it.kotlin, extraKey, VM::class)
     }
-}
-
-/**
- * You shouldn't need to call this directly.
- */
-inline fun <reified VM : ViewModel> Fragment.registerFragmentOnCreate(
-    crossinline fragmentFinder: () -> Fragment?,
-    crossinline fragmentProducer: () -> Fragment,
-    key: String
-) {
-    lifecycle.addObserver(object : DefaultLifecycleObserver {
-        override fun onCreate(owner: LifecycleOwner) {
-            if (fragmentFinder() == null) {
-                childFragmentManager.beginTransaction()
-                    .add(fragmentProducer(), key)
-                    .commitNow()
-            }
-            putOwnerInRegistry<VM>(key, fragmentProducer())
-        }
-    })
 }
 
 /**
