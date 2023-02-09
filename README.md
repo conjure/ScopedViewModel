@@ -1,6 +1,18 @@
 # ScopedViewModel
 [![](https://jitpack.io/v/uk.co.conjure/ScopedViewModel.svg)](https://jitpack.io/#uk.co.conjure/ScopedViewModel)
 
+## Including the library
+
+Add `jitpack.io` to your repositories in your **projects** `build.gradle` file.
+```gradle
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+Add ScopedViewModel to your dependencies of your module.
 ```gradle
 dependencies {
   implementation 'uk.co.conjure:ScopedViewModel:TAG'

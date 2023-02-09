@@ -22,25 +22,48 @@ class ViewModelStoreOwnerRegistry private constructor() {
         val instance: ViewModelStoreOwnerRegistry by lazy { ViewModelStoreOwnerRegistry() }
     }
 
-    private val map: MutableMap<String, WeakReference<ViewModelStoreOwner>> = hashMapOf()
+    /**
+     * A map from the view model class name to a second map of the extra key to the ViewModelStoreOwner.
+     */
+    private val map = hashMapOf<ViewModelClass, WeakReference<ViewModelStoreOwner>>()
 
-    private val interfaceMap: MutableMap<KClass<out Any>, KClass<out ViewModel>> = mutableMapOf()
+    /**
+     * A map from the interface KClass to a second map of the extra key to the ViewModel KClass.
+     */
+    private val interfaceMap = hashMapOf<Interface, KClass<out ViewModel>>()
 
-    fun <VM : ViewModel> put(viewModelClass: KClass<VM>, owner: ViewModelStoreOwner) {
-        map[viewModelClass.qualifiedName!!] = WeakReference(owner)
+    fun <VM : ViewModel> put(
+        viewModelClass: KClass<VM>,
+        extraKey: String,
+        owner: ViewModelStoreOwner
+    ) {
+        viewModelClass.qualifiedName?.let { className ->
+            map[ViewModelClass(className, extraKey)] = WeakReference(owner)
+        }
     }
 
-    fun <VM : ViewModel> get(viewModelClass: KClass<VM>): ViewModelStoreOwner? {
-        return map[viewModelClass.qualifiedName]?.get()
+    fun <VM : ViewModel> get(
+        viewModelClass: KClass<VM>,
+        extraKey: String
+    ): ViewModelStoreOwner? {
+        return map[ViewModelClass(viewModelClass.qualifiedName!!, extraKey)]?.get()
     }
 
-    fun <VM : ViewModel> registerInterface(register: KClass<out Any>, with: KClass<VM>) {
-        val registered = interfaceMap[register]
-        if (registered != null && registered != with) throw IllegalStateException("Can not register more than one ViewModel with the Interface $register.")
-        interfaceMap[register] = with
+    fun <VM : ViewModel> registerInterface(
+        interfaceClass: KClass<out Any>,
+        key: String,
+        viewModelClass: KClass<VM>
+    ) {
+        val interfaceKey = Interface(interfaceClass, key)
+        val registered = interfaceMap[interfaceKey]
+        if (registered != null && registered != viewModelClass) throw IllegalStateException("Can not register more than one ViewModel with the Interface $interfaceClass and key $key.")
+        interfaceMap[interfaceKey] = viewModelClass
     }
 
-    fun getViewModel(myInterface: KClassifier): KClass<out ViewModel>? {
-        return interfaceMap[myInterface]
+    fun getViewModel(myInterface: KClassifier, extraKey: String): KClass<out ViewModel>? {
+        return interfaceMap[Interface(myInterface, extraKey)]
     }
+
+    data class Interface(val interfaceClass: KClassifier, val key: String)
+    data class ViewModelClass(val className: String, val key: String)
 }

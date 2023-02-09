@@ -8,10 +8,13 @@ import uk.co.conjure.vmscopedemo.ui.main.NavigationViewModel
 import uk.co.conjure.vmscopedemo.ui.main.Screen
 import uk.co.conjure.vmscopedemo.ui.main.screens.first.ActivityViewModel
 import uk.co.conjure.vmscopedemo.ui.main.screens.first.ParentFragment
+import uk.co.conjure.vmscopedemo.ui.main.screens.multifragment.MultiChildFragment
+import uk.co.conjure.vmscopedemo.ui.main.screens.multifragment.MultiFragmentFragment
 import uk.co.conjure.vmscopedemo.ui.main.screens.second.OtherFragment
 
 private const val FIRST_FRAGMENT_TAG = "FIRST_FRAGMENT"
 private const val SECOND_FRAGMENT_TAG = "SECOND_FRAGMENT"
+private const val MULTI_FRAGMENT_TAG = "MULTI_FRAGMENT_TAG"
 
 /**
  * The MainActivity subscribes to the [NavigationViewModel.currentScreen] to switch between
@@ -33,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             when (screen) {
                 Screen.FIRST -> showFirstScreen()
                 Screen.SECOND -> showSecondScreen()
+                Screen.MULTIFRAGMENT -> showMultifragmentScreen()
                 null -> {} // ignore
             }
         }
@@ -51,6 +55,14 @@ class MainActivity : AppCompatActivity() {
         if (supportFragmentManager.findFragmentByTag(SECOND_FRAGMENT_TAG) == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, OtherFragment(), SECOND_FRAGMENT_TAG)
+                .commitNow()
+        }
+    }
+
+    private fun showMultifragmentScreen() {
+        if (supportFragmentManager.findFragmentByTag(MULTI_FRAGMENT_TAG) == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, MultiFragmentFragment(), MULTI_FRAGMENT_TAG)
                 .commitNow()
         }
     }
