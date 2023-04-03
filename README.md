@@ -1,16 +1,20 @@
 # ScopedViewModel
 [![](https://jitpack.io/v/uk.co.conjure/ScopedViewModel.svg)](https://jitpack.io/#uk.co.conjure/ScopedViewModel)
 
+Android library to provide ViewModels based on a scope extending the functionality of Fragment KTX.
+
+View the [API documentation](https://developer.conjure.co.uk/api/ScopedViewModel/index.html).
+
 ## Including the library
 
 Add `jitpack.io` to your repositories in your **projects** `build.gradle` file.
 ```gradle
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+    repositories {
+	    ...
+    maven { url 'https://jitpack.io' }
+    }
+}
 ```
 Add ScopedViewModel to your dependencies of your module.
 ```gradle
@@ -18,9 +22,6 @@ dependencies {
   implementation 'uk.co.conjure:ScopedViewModel:TAG'
 }
 ```
-
-Android library to provide ViewModels based on a scope extending the functionality of Fragment KTX.
-
 
 ## Code Sample
 
