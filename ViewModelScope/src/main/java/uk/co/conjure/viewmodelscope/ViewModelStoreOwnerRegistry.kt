@@ -1,5 +1,6 @@
 package uk.co.conjure.viewmodelscope
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import java.lang.ref.WeakReference
@@ -56,7 +57,13 @@ class ViewModelStoreOwnerRegistry private constructor() {
     ) {
         val interfaceKey = Interface(interfaceClass, key)
         val registered = interfaceMap[interfaceKey]
-        if (registered != null && registered != viewModelClass) throw IllegalStateException("Can not register more than one ViewModel with the Interface $interfaceClass and key $key.")
+        if (registered != null && registered != viewModelClass) {
+            Log.w("ViewModelStoreOwnerRegistry",
+                "Warning more than one ViewModel with the Interface $interfaceClass and " +
+                        "key $key was registered. Are you sure this was intentional? The " +
+                        "default behaviour is to store only the last one registered."
+            )
+        }
         interfaceMap[interfaceKey] = viewModelClass
     }
 
