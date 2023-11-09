@@ -41,7 +41,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'uk.co.conjure'
                 artifactId = 'scopedviewmodel'
-                version = '1.5.0'
+                version = '1.5.3'
             }
         }
     }
